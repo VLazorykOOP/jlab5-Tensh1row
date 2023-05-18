@@ -1,0 +1,113 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
+
+public class HeximalBinaryCollection {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Введіть шлях до файлу heximals.txt: ");
+        String hexPath = scanner.nextLine();
+
+        System.out.print("Введіть шлях до файлу binaries.txt: ");
+        String binPath = scanner.nextLine();
+
+        File hexFile = new File(hexPath);
+        File binFile = new File(binPath);
+
+        ArrayList<String> hexList = readLinesFromFile(hexFile);
+        ArrayList<String> binList = readLinesFromFile(binFile);
+
+        System.out.println("Список шістнадцяткових чисел:");
+        printList(hexList);
+
+        System.out.println("Список двійкових чисел:");
+        printList(binList);
+
+        System.out.println("Сортування шістнадцяткових чисел:");
+        sortAndPrintList(hexList);
+
+        System.out.println("Сортування двійкових чисел:");
+        sortAndPrintList(binList);
+    }
+
+    private static ArrayList<String> readLinesFromFile(File file) {
+        ArrayList<String> lines = new ArrayList<>();
+
+        try {
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                lines.add(line);
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Помилка: Файл не знайдено: " + file.getPath());
+        }
+
+        return lines;
+    }
+
+    private static void printList(ArrayList<String> list) {
+        for (String item : list) {
+            System.out.println(item);
+        }
+    }
+
+    private static void sortAndPrintList(ArrayList<String> list) {
+        Collections.sort(list);
+        printList(list);
+    }
+}
+
+
+class Binary implements Comparable<Binary> {
+    private int[] digits;
+
+    public Binary(int[] digits) {
+        this.digits = digits;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (int digit : digits) {
+            builder.append(digit);
+        }
+        return builder.toString();
+    }
+
+    @Override
+    public int compareTo(Binary other) {
+        int thisValue = Integer.parseInt(this.toString(), 2);
+        int otherValue = Integer.parseInt(other.toString(), 2);
+        return Integer.compare(thisValue, otherValue);
+    }
+}
+
+
+class Heximal implements Comparable<Heximal> {
+    private int[] digits;
+
+    public Heximal(int[] digits) {
+        this.digits = digits;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (int digit : digits) {
+            builder.append(digit);
+        }
+        return builder.toString();
+    }
+
+    @Override
+    public int compareTo(Heximal other) {
+        int thisValue = Integer.parseInt(this.toString(), 16);
+        int otherValue = Integer.parseInt(other.toString(), 16);
+        return Integer.compare(thisValue, otherValue);
+    }
+}
