@@ -1,0 +1,52 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
+
+public class PolynomialMultiplication {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Введіть степінь першого многочлена: ");
+        int degree1 = scanner.nextInt();
+        ArrayList<Integer> coefficients1 = readCoefficients(degree1, scanner);
+
+        System.out.print("Введіть степінь другого многочлена: ");
+        int degree2 = scanner.nextInt();
+        ArrayList<Integer> coefficients2 = readCoefficients(degree2, scanner);
+
+        ArrayList<Integer> product = multiplyPolynomials(coefficients1, coefficients2);
+        System.out.println("Результат множення многочленів: " + product);
+    }
+
+    private static ArrayList<Integer> readCoefficients(int degree, Scanner scanner) {
+        ArrayList<Integer> coefficients = new ArrayList<>();
+
+        for (int i = degree; i >= 0; i--) {
+            System.out.print("Введіть коефіцієнт для степеня " + i + ": ");
+            int coefficient = scanner.nextInt();
+            coefficients.add(coefficient);
+        }
+
+        Collections.reverse(coefficients);
+        return coefficients;
+    }
+
+    private static ArrayList<Integer> multiplyPolynomials(ArrayList<Integer> coefficients1, ArrayList<Integer> coefficients2) {
+        int degree1 = coefficients1.size() - 1;
+        int degree2 = coefficients2.size() - 1;
+        int productDegree = degree1 + degree2;
+        ArrayList<Integer> product = new ArrayList<>(Collections.nCopies(productDegree + 1, 0));
+
+        for (int i = 0; i <= degree1; i++) {
+            for (int j = 0; j <= degree2; j++) {
+                int coefficient1 = coefficients1.get(i);
+                int coefficient2 = coefficients2.get(j);
+                int productCoefficient = coefficient1 * coefficient2;
+                int sumCoefficient = product.get(i + j) + productCoefficient;
+                product.set(i + j, sumCoefficient);
+            }
+        }
+
+        return product;
+    }
+}
